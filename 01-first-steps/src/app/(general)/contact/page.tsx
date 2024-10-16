@@ -6,12 +6,10 @@ export const metadata: Metadata = {
     keywords: ['hello', 'contact us', 'question']
 };
 
-const ContactPage = () => {
+export default function ContactPage() {
     return (
         <>
             <span className='text-7xl'>Contact Page</span>
         </>
     );
 }
-
-export default ContactPage;

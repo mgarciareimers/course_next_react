@@ -5,12 +5,10 @@ export const metadata: Metadata = {
     description: 'What are our costs?',
 };
 
-const PricingPage = () => {
+export default function PricingPage() {
     return (
         <>
             <span className='text-7xl'>Pricing Page</span>
         </>
     );
 }
-
-export default PricingPage;
