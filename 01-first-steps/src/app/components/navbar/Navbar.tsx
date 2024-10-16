@@ -19,7 +19,7 @@ const Navbar = () => {
         <div className='flex flex-1'></div>
 
         {
-          navItems.map(item => (
+          navItems.map((item) => (
             <ActiveLink 
               key={ item.path }
               { ...item } />
