@@ -10,6 +10,13 @@ interface Props {
     },
 }
 
+// Executed only in build time.
+export const generateStaticParams = async() => {
+    return Array.from({ length: 151 }).map((value, index) => ({
+        id: `${ index + 1 }`
+    }));
+}
+
 export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
     try {
         const { id, name } = await getPokemon(params.id)
@@ -28,7 +35,13 @@ export const generateMetadata = async ({ params }: Props): Promise<Metadata> => 
 
 const getPokemon = async(id: string): Promise<Pokemon> => {
     try {
-        const pokemon = await fetch(`https://pokeapi.co/api/v2/pokemon/${ id }`, { cache: 'force-cache' })
+        const pokemon = await fetch(
+            `https://pokeapi.co/api/v2/pokemon/${ id }`, { 
+                // cache: 'force-cache', 
+                next: {
+                    revalidate: 60 * 60 * 30 * 6 // Revalidate every 6 months.
+                } 
+            })
         .then((response: Response) => response.json());
     
         return pokemon;
