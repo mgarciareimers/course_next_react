@@ -2,6 +2,7 @@ import { Pokemon } from '@/pokemons';
 import { Move, Type } from '@/pokemons/interfaces/pokemon';
 import { Metadata } from 'next';
 import Image from 'next/image';
+import { notFound } from 'next/navigation';
 
 interface Props {
     params: {
@@ -10,20 +11,30 @@ interface Props {
 }
 
 export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
-    const { id, name } = await getPokemon(params.id)
+    try {
+        const { id, name } = await getPokemon(params.id)
 
-    return {
-        title: `#${ id } - ${ name.toUpperCase() }`,
-        description: `Page of pokemon :${ name.toUpperCase() }`
+        return {
+            title: `#${ id } - ${ name.toUpperCase() }`,
+            description: `Page of pokemon :${ name.toUpperCase() }`
+        }
+    } catch(e) {
+        return {
+            title: `Pokemon page error`,
+            description: `An error occured.`
+        }
     }
 }
 
 const getPokemon = async(id: string): Promise<Pokemon> => {
-    const pokemon = await fetch(`https://pokeapi.co/api/v2/pokemon/${ id }`, { cache: 'force-cache' })
+    try {
+        const pokemon = await fetch(`https://pokeapi.co/api/v2/pokemon/${ id }`, { cache: 'force-cache' })
         .then((response: Response) => response.json());
     
-    
-    return pokemon;
+        return pokemon;
+    } catch(e) {
+        notFound();
+    }
 }
 
 export default async function PokemonPage({ params }: Props) {
@@ -44,7 +55,6 @@ export default async function PokemonPage({ params }: Props) {
                     alt={ `Picture of ${ pokemon.name }` }
                     className='mb-5'
                     />
-        
         
                     <div className='flex flex-wrap'>
                     {

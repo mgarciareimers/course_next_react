@@ -16,7 +16,7 @@ export default async function PokemonsPage() {
     const pokemons: SimplePokemon [] = await getPokemons(151);
 
     return (
-        <div className='flex flex-col'>
+        <div className='p-2 flex flex-col'>
             <span className='text-5xl my-2'>Pokemons List <small>(static)</small></span>
             
             <PokemonGrid pokemons={ pokemons } />
