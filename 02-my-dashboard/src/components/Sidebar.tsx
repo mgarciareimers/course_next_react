@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { IoBrowsersOutline, IoCalculator, IoFootball, IoLogoReact } from 'react-icons/io5';
+import { IoBrowsersOutline, IoCalculator, IoFootball, IoHeart, IoLogoReact } from 'react-icons/io5';
 import SidebarMenuItem from './SidebarMenuItem';
 
 const menutItems : any [] = [
@@ -21,6 +21,12 @@ const menutItems : any [] = [
         icon: <IoFootball size={ 40 } />,
         title: 'Pokemons',
         subtitle: 'Static Generation'
+    },
+    {
+        path: '/dashboard/favourites',
+        icon: <IoHeart size={ 40 } />,
+        title: 'Favourites',
+        subtitle: 'Global State'
     }
 ];
 

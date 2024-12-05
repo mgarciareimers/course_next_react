@@ -9,6 +9,9 @@ interface Props {
     },
 }
 
+export const dynamicParams = false;
+export const revalidate = 86400;
+
 // !Executed only in project build time.
 export const generateStaticParams = async () => {
     const data: PokemonsResponse = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=151&offset=0`)
@@ -24,7 +27,7 @@ export const generateStaticParams = async () => {
 
 export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
     try {
-        const { id, name } = await getPokemon(params.name)
+        const { id, name } = await getPokemon(params.name);
 
         return {
             title: `#${ id } - ${ name.toUpperCase() }`,
@@ -44,7 +47,7 @@ const getPokemon = async(name: string): Promise<Pokemon> => {
             `https://pokeapi.co/api/v2/pokemon/${ name }`, { 
                 // cache: 'force-cache', 
                 next: {
-                    revalidate: 60 * 60 * 30 * 6 // Revalidate every 6 months.
+                    revalidate: 60 * 60 * 24 // Revalidate every 24h (86400s).
                 } 
             })
         .then((response: Response) => response.json());
