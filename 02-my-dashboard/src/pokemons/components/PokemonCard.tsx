@@ -1,13 +1,25 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { SimplePokemon } from '../interfaces/simple-pokemon';
-import { IoHeartOutline } from 'react-icons/io5';
+import { IoHeart, IoHeartOutline } from 'react-icons/io5';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { toggleFavourite } from '@/store/pokemons/pokemonsSlice';
 
 interface Props {
     pokemon: SimplePokemon
 }
 
 export const PokemonCard = ({ pokemon } : Props) => {
+    const isFavourite = useAppSelector((state) => state.pokemons[pokemon.id] !== undefined);
+
+    const dispatch = useAppDispatch();
+
+    const onToggle = () => {
+        dispatch(toggleFavourite(pokemon));
+    }
+
     return (
         <div className='mx-auto right-0 mt-2 w-60'>
             <div className='flex flex-col bg-white rounded overflow-hidden shadow-lg'>
@@ -31,17 +43,27 @@ export const PokemonCard = ({ pokemon } : Props) => {
                     </div>
                 </div>
                 <div className='border-b'>
-                    <Link href='/dashboard/name' className='px-4 py-2 hover:bg-gray-100 flex items-center'>
+                    <div onClick={ onToggle } className='px-4 py-2 hover:bg-gray-100 flex items-center cursor-pointer'>
                         <div className='text-red-600'>
-                            <IoHeartOutline />
+                            {
+                                isFavourite 
+                                    ? (<IoHeart />)
+                                    : (<IoHeartOutline />)
+                            }
                         </div>
                         <div className='pl-3'>
                             <p className='text-sm font-medium text-gray-800 leading-none'>
-                                Add to favourites
+                                {
+                                    isFavourite
+                                        ? 'Remove from favourites'
+                                        : 'Add to favourites'
+                                }
                             </p>
-                        <p className='text-xs text-gray-500'>Save it into favourites for later</p>
+
+                        
+                        <p className='text-xs text-gray-500'>Click to add/remove</p>
                         </div>
-                    </Link>
+                    </div>
                 </div>
             </div>
         </div>
