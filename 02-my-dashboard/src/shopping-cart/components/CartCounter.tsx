@@ -1,20 +1,43 @@
 'use client';
 
-import React from 'react';
-
-import { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { addOne, initCounterState, substractOne } from '@/store/counter/counterSlice';
+import React, { useEffect } from 'react';
 
 interface Props {
     value?: number;
 }
 
+export interface CounterResponse {
+    counter: number;
+}
+
+const getApiCounter = async (): Promise<CounterResponse> => {
+    const data = await fetch('/api/counter')
+        .then((res: Response) => res.json());
+
+    return data;
+}
+
 const CartCounter = ({ value = 0 } : Props) => {
-    const [ counter, setCounter ] = useState(value);
+    const counter: number = useAppSelector((state) => state.counter.count);
+    const dispatch = useAppDispatch();
+
+    /*
+    useEffect(() => {
+      dispatch(initCounterState(value));
+    }, [ dispatch, value ]);
+    */
+
+    useEffect(() => {
+      getApiCounter()
+        .then((data: CounterResponse) => dispatch(initCounterState(data.counter)));
+    }, [dispatch]);
+    
 
     // On click methods.
     const onChangeCounterButtonClicked = (coefficient : number) => {
-        const newCounter = counter + coefficient;
-        setCounter(newCounter < 0 ? 0 : newCounter);
+        dispatch(coefficient < 0 ? substractOne() : addOne());
     }
 
     return (

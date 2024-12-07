@@ -12,5 +12,5 @@ export const Providers = ({ children }: Props) => {
         <Provider store={ store } >
             { children }
         </Provider>
-    )
+    );
 }
