@@ -3,16 +3,27 @@
 import Link from 'next/link';
 import { useAppSelector } from '@/store';
 import { PokemonGrid } from './PokemonGrid'
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { IoHeartOutline } from 'react-icons/io5';
 
 export const PokemonFavourites = () => {
-    const pokemons = useAppSelector((state => state.pokemons));
+    const favourites = useAppSelector((state) => state.pokemons.favourites);
 
-    const [ favourites, setFavourites ] = useState(Object.values(pokemons));
+    const [ pokemons, setPokemons ] = useState(Object.values(favourites));
+    
+    const isLoad = useRef<boolean>(false);
+
+    useEffect(() => {
+        if (isLoad.current || Object.values(favourites).length === 0) {
+            return;
+        }
+
+        setPokemons(Object.values(favourites));
+    }, [ favourites ])
+    
     
     return (
-        favourites.length === 0
+        pokemons.length === 0
             ? (
                 <div className='flex flex-col h-[50vh] items-center justify-center'>
                     <IoHeartOutline size={ 50 } className='text-red-500' />
@@ -20,7 +31,7 @@ export const PokemonFavourites = () => {
                 </div>
             )
             : (
-                <PokemonGrid pokemons={ favourites } />
+                <PokemonGrid pokemons={ pokemons } />
             )
     )
 }

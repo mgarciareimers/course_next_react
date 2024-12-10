@@ -32,7 +32,7 @@ const CartCounter = ({ value = 0 } : Props) => {
     useEffect(() => {
       getApiCounter()
         .then((data: CounterResponse) => dispatch(initCounterState(data.counter)));
-    }, [dispatch]);
+    }, [ dispatch ]);
     
 
     // On click methods.
